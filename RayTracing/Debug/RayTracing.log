@@ -1,0 +1,55 @@
+﻿  main.cpp
+G:\Documents\KTH\DD1395\RayTracing\vec3.h(61,67): error C2084: function 'std::ostream &operator <<(std::ostream &,const vec3 &)' already has a body
+G:\Documents\KTH\DD1395\RayTracing\vec3.h(61): message : see previous definition of '<<'
+G:\Documents\KTH\DD1395\RayTracing\vec3.h(65,53): error C2084: function 'vec3 operator +(const vec3 &,const vec3 &)' already has a body
+G:\Documents\KTH\DD1395\RayTracing\vec3.h(65): message : see previous definition of '+'
+G:\Documents\KTH\DD1395\RayTracing\vec3.h(69,53): error C2084: function 'vec3 operator -(const vec3 &,const vec3 &)' already has a body
+G:\Documents\KTH\DD1395\RayTracing\vec3.h(69): message : see previous definition of '-'
+G:\Documents\KTH\DD1395\RayTracing\vec3.h(73,53): error C2084: function 'vec3 operator *(const vec3 &,const vec3 &)' already has a body
+G:\Documents\KTH\DD1395\RayTracing\vec3.h(73): message : see previous definition of '*'
+G:\Documents\KTH\DD1395\RayTracing\vec3.h(77,48): error C2084: function 'vec3 operator *(double,const vec3 &)' already has a body
+G:\Documents\KTH\DD1395\RayTracing\vec3.h(77): message : see previous definition of '*'
+G:\Documents\KTH\DD1395\RayTracing\vec3.h(81,48): error C2084: function 'vec3 operator *(const vec3 &,double)' already has a body
+G:\Documents\KTH\DD1395\RayTracing\vec3.h(81): message : see previous definition of '*'
+G:\Documents\KTH\DD1395\RayTracing\vec3.h(82,17): error C2264: 'operator *': error in function definition or declaration; function not called
+G:\Documents\KTH\DD1395\RayTracing\vec3.h(82,14): error C2088: '*': illegal for class
+G:\Documents\KTH\DD1395\RayTracing\vec3.h(85,41): error C2084: function 'vec3 operator /(vec3,double)' already has a body
+G:\Documents\KTH\DD1395\RayTracing\vec3.h(85): message : see previous definition of '/'
+G:\Documents\KTH\DD1395\RayTracing\vec3.h(86,23): error C2264: 'operator *': error in function definition or declaration; function not called
+G:\Documents\KTH\DD1395\RayTracing\vec3.h(86,20): error C2088: '*': illegal for class
+G:\Documents\KTH\DD1395\RayTracing\vec3.h(89,49): error C2084: function 'double dot(const vec3 &,const vec3 &)' already has a body
+G:\Documents\KTH\DD1395\RayTracing\vec3.h(89): message : see previous definition of 'dot'
+G:\Documents\KTH\DD1395\RayTracing\vec3.h(95,49): error C2084: function 'vec3 cross(const vec3 &,const vec3 &)' already has a body
+G:\Documents\KTH\DD1395\RayTracing\vec3.h(95): message : see previous definition of 'cross'
+G:\Documents\KTH\DD1395\RayTracing\vec3.h(101,33): error C2084: function 'vec3 unit_vector(vec3)' already has a body
+G:\Documents\KTH\DD1395\RayTracing\vec3.h(101): message : see previous definition of 'unit_vector'
+G:\Documents\KTH\DD1395\RayTracing\vec3.h(102,26): error C2264: 'operator /': error in function definition or declaration; function not called
+G:\Documents\KTH\DD1395\RayTracing\vec3.h(102,14): error C2088: '/': illegal for class
+G:\Documents\KTH\DD1395\RayTracing\ray.h(17,1): error C2264: 'operator *': error in function definition or declaration; function not called
+G:\Documents\KTH\DD1395\RayTracing\ray.h(17,25): error C2088: '*': illegal for class
+G:\Documents\KTH\DD1395\RayTracing\vec3.h(82,17): error C2264: 'operator *': error in function definition or declaration; function not called
+G:\Documents\KTH\DD1395\RayTracing\vec3.h(82,14): error C2088: '*': illegal for class
+G:\Documents\KTH\DD1395\RayTracing\vec3.h(86,23): error C2264: 'operator *': error in function definition or declaration; function not called
+G:\Documents\KTH\DD1395\RayTracing\vec3.h(86,20): error C2088: '*': illegal for class
+G:\Documents\KTH\DD1395\RayTracing\vec3.h(102,26): error C2264: 'operator /': error in function definition or declaration; function not called
+G:\Documents\KTH\DD1395\RayTracing\vec3.h(102,14): error C2088: '/': illegal for class
+G:\Documents\KTH\DD1395\RayTracing\main.cpp(8,27): error C2065: 'unit_vector': undeclared identifier
+G:\Documents\KTH\DD1395\RayTracing\main.cpp(8,53): error C2440: 'initializing': cannot convert from 'vec3 (__cdecl *)(vec3)' to 'vec3'
+G:\Documents\KTH\DD1395\RayTracing\main.cpp(8,53): message : No constructor could take the source type, or constructor overload resolution was ambiguous
+G:\Documents\KTH\DD1395\RayTracing\main.cpp(10,45): error C2264: 'operator *': error in function definition or declaration; function not called
+G:\Documents\KTH\DD1395\RayTracing\main.cpp(10,22): error C2088: '*': illegal for class
+G:\Documents\KTH\DD1395\RayTracing\main.cpp(10,71): error C2264: 'operator *': error in function definition or declaration; function not called
+G:\Documents\KTH\DD1395\RayTracing\main.cpp(10,49): error C2088: '*': illegal for class
+G:\Documents\KTH\DD1395\RayTracing\main.cpp(29,54): error C2264: 'operator /': error in function definition or declaration; function not called
+G:\Documents\KTH\DD1395\RayTracing\main.cpp(29,50): error C2088: '/': illegal for class
+G:\Documents\KTH\DD1395\RayTracing\main.cpp(29,69): error C2264: 'operator /': error in function definition or declaration; function not called
+G:\Documents\KTH\DD1395\RayTracing\main.cpp(29,65): error C2088: '/': illegal for class
+G:\Documents\KTH\DD1395\RayTracing\main.cpp(40,45): error C3536: 'lower_left_corner': cannot be used before it is initialized
+G:\Documents\KTH\DD1395\RayTracing\main.cpp(40,62): error C2264: 'operator *': error in function definition or declaration; function not called
+G:\Documents\KTH\DD1395\RayTracing\main.cpp(40,49): error C2088: '*': illegal for class
+G:\Documents\KTH\DD1395\RayTracing\main.cpp(40,77): error C2264: 'operator *': error in function definition or declaration; function not called
+G:\Documents\KTH\DD1395\RayTracing\main.cpp(40,66): error C2088: '*': illegal for class
+G:\Documents\KTH\DD1395\RayTracing\main.cpp(40,86): error C2664: 'ray::ray(ray &&)': cannot convert argument 1 from 'point3' to 'const ray &'
+G:\Documents\KTH\DD1395\RayTracing\main.cpp(40,86): message : Reason: cannot convert from 'point3' to 'const ray'
+G:\Documents\KTH\DD1395\RayTracing\main.cpp(40,19): message : No user-defined-conversion operator available that can perform this conversion, or the operator cannot be called
+G:\Documents\KTH\DD1395\RayTracing\ray.h(23,1): message : see declaration of 'ray::ray'

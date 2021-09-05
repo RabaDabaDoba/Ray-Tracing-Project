@@ -1,0 +1,2 @@
+G:\Documents\KTH\DD1395\RayTracing\Debug\RayTracing.exe
+G:\Documents\KTH\DD1395\RayTracing\Debug\RayTracing.pdb
