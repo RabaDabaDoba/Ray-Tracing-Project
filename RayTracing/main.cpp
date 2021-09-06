@@ -5,8 +5,13 @@
 #include "sphere.h"
 #include "vec3.h"
 #include "material.h"
+#include <iostream>
+#include <fstream>
 
 //Path: G:\Documents\KTH\DD1395\RayTracing\Release
+
+double lengthS(point3 p);
+double length_squaredS(point3 p);
 
 double hit_sphere(const point3& center, double radius, const ray& r) {
     vec3 oc = r.origin() - center;
@@ -48,25 +53,113 @@ double fRand(double fMin, double fMax)
     return fMin + f * (fMax - fMin);
 }
 
+double lengthS(point3 p) {
+    return sqrt(length_squaredS(p));
+}
+
+double length_squaredS(point3 p){
+    return p[0] * p[0] + p[1] * p[1] + p[2] * p[2];
+}
+
+hittable_list generateSpiral() {
+    hittable_list world;
+    int n = 100;
+    //int t = 0;
+
+    for (float t = 0; t <= 50; t = t + fRand(0.1,0.2)) {
+        std::cerr << "\rHey! " << t << ' ' << std::endl;
+        auto x = t * cos(3 * t);
+        auto z = t * sin(3 * t);
+        auto y = t;
+
+
+        auto choice = (int)ceil(fRand(0, 3));
+        float size = .6;//fmax(t / 12,0.5);
+        std::cerr << size << std::endl;
+        if (choice == 1) {
+            //regular
+
+            auto material = make_shared<lambertian>(color(fRand(0, 1), fRand(0, 1), fRand(0, 1)));
+            world.add(make_shared<sphere>(point3(x, y, z), size, material));
+        }
+        else if (choice == 2)
+        {
+
+            auto material = make_shared<metal>(color(fRand(0, 1), fRand(0, 1), fRand(0, 1)), fRand(0, 1));
+            world.add(make_shared<sphere>(point3(x, y, z), size, material));
+        }
+        else if (choice == 3)
+        {
+            auto material = make_shared<dielectric>(fRand(-0.5, 0.5));
+            world.add(make_shared<sphere>(point3(x, y, z), size, material));
+        }
+
+    }
+        
+
+
+    return world;
+}
+
+hittable_list generateGrid() {
+    hittable_list world;
+    std::cerr << "\rHey! " << ' ' << std::flush;
+    //Want to make a grid of spheres with different materials
+    double fraction = 10 / (7*6);
+    double counter = -1.0;
+    for (int i = 9; i >=-9; i-=3)
+    {
+        for (int j = -6; j <= 9; j += 3)
+        {
+            auto choice = (int)ceil(fRand(0, 2));
+            auto size = 1;
+            if (choice == 1) {
+                //regular
+
+                auto material = make_shared<lambertian>(color(fRand(0, 1), fRand(0, 1), fRand(0, 1)));
+                world.add(make_shared<sphere>(point3(i,j,0), size, material));
+            }
+            else if (choice == 2)
+            {
+
+                auto material = make_shared<metal>(color(fRand(0, 1), fRand(0, 1), fRand(0, 1)), fRand(0, 1));
+                world.add(make_shared<sphere>(point3(i, j, 0), size, material));
+            }
+            else if (choice == 3)
+            {
+                auto material = make_shared<dielectric>(fRand(-0.5, 0.5));
+                world.add(make_shared<sphere>(point3(i, j, 0), size, material));
+            }
+            
+            
+        }
+    }
+
+    return world;
+}
+
 int main() {
 
     // Image
     const auto aspect_ratio = 16.0 / 9.0;
-    const int image_width = 720;
+    const int image_width = 480;
     const int image_height = static_cast<int>(image_width / aspect_ratio);
-    const int samples_per_pixel = 100;
-    const int max_depth = 10;
+    const int samples_per_pixel = 80;
+    const int max_depth = 15;
 
     // Camera
     hittable_list world;
 
     auto material_ground = make_shared<lambertian>(color(1,1,1));
-    auto material_center = make_shared<lambertian>(color(0.1, 0.2, 0.5));
+    auto material_center = make_shared<lambertian>(color(1,1,0));
     auto material_left = make_shared<dielectric>(1.5);
-    auto material_right = make_shared<metal>(color(0.8, 0.6, 0.2), 0.0);
+    auto material_right = make_shared<metal>(color(.5,.5,.5), 0.0);
+    auto material_1 = make_shared<metal>(color(1,1,1), 0);
 
-    world.add(make_shared<sphere>(point3(0.0, -1000.5, -1.0), 1000.0, material_ground));
-    world.add(make_shared<sphere>(point3(0.0, 5, 0), 3, material_right));
+    world.add(make_shared<sphere>(point3(0.0, -1000, -1.0), 1000.0, material_ground));
+    //world.add(make_shared<sphere>(point3(-125.0, 0, -125.0), 100.0, material_right));
+    //world.add(make_shared<sphere>(point3(0.0, 1200.5, -1.0), 1000.0, material_ground));
+    //world.add(make_shared<sphere>(point3(0.0, 5, 0), 3, material_right));
     //world.add(make_shared<sphere>(point3(0.0, 0.0, -1.0), 0.5, material_center));
     //world.add(make_shared<sphere>(point3(-1.0, 0.0, -1.0), 0.5, material_left));
     //world.add(make_shared<sphere>(point3(-1.0, 0.0, -1.0), -0.45, material_left));
@@ -75,50 +168,62 @@ int main() {
     //Generate world;
     
 
+    //world = generateGrid();
+    world = generateSpiral();
+
+    /*
     point3 focusPoint(0, 0, 0);
-    int spheres = 100;
+    int spheres = 200;
     for (size_t i = 0; i < spheres; i++)
     {
+        std::cerr << "\Spheres remaining: " << i << ' ' << std::flush;
         //point3 pos(fRand(30, 30), fRand(1, 1), fRand(30, 30));
         //add to focus
         //focusPoint += pos;
         //color c(fRand(0, 1), fRand(0, 1), fRand(0, 1));
-        auto choice = (int)ceil(fRand(0, 2));
-        auto size = fRand(0.1, 3);
-        if (choice == 1) {
+        auto choice = ceil(fRand(0, 3));
+        auto size = fRand(0.1, 2);
+        if (choice <= 1) {
             //regular
 
             auto material= make_shared<lambertian>(color(fRand(0, 1), fRand(0, 1), fRand(0, 1)));
-            world.add(make_shared<sphere>(point3(fRand(30, 30), fRand(3, 5), fRand(30, 30)), size, material));
+            world.add(make_shared<sphere>(point3(fRand(-20,20), fRand(size/2, 5+size/2), fRand(-20, 20)), size, material));
         }
-        else if(choice == 2)
+        else if(choice >= 1 && choice
+             < 2)
         {
-
+            std::cerr << "\rHey! " << ' ' << std::endl;
+            auto material = make_shared<dielectric>(fRand(-5, 1));
+            world.add(make_shared<sphere>(point3(fRand(-20, 20), fRand(size / 2, 5 + size / 2), fRand(-20, 20)), size, material));
+            
+        }
+        else        {
             auto material = make_shared<metal>(color(fRand(0, 1), fRand(0, 1), fRand(0, 1)), fRand(0, 1));
-            world.add(make_shared<sphere>(point3(fRand(30, 30), fRand(1, 1), fRand(30, 30)), size, material));
-        }
-        else if (choice == 3)
-        {
-            auto material = make_shared<dielectric>(fRand(-0.5, 0.5));
-            world.add(make_shared<sphere>(point3(fRand(30, 30), fRand(1, 1), fRand(30, 30)), size, material));
+            world.add(make_shared<sphere>(point3(fRand(-20, 20), fRand(size / 2, 5 + size / 2), fRand(-20, 20)), size, material));
         }
 
     }
-    focusPoint /= spheres;
+    focusPoint /= spheres;*/
 
     // Camera
 
-    point3 lookfrom(20,20,20);
-    point3 lookat(vec3(0,0,0));
+    point3 lookfrom(40,10,40);
+    point3 lookat(vec3(0,0, 0));
+ 
     vec3 vup(0, 1, 0);
-    auto dist_to_focus = 100;
-    auto aperture = 0.1;
+    auto dist_to_focus = 20;
+    auto aperture = 0.2;
+    
+    double distance_Test = lengthS(lookat -lookfrom);
 
-    camera cam(lookfrom, lookat, vup, 70, aspect_ratio, aperture, dist_to_focus);
+    camera cam(lookfrom, lookat, vup, 50, aspect_ratio, aperture, distance_Test);
 
     // Render
 
     std::cout << "P3\n" << image_width << " " << image_height << "\n255\n";
+
+    //File
+   
 
     for (int j = image_height - 1; j >= 0; --j) {
         std::cerr << "\rScanlines remaining: " << j << ' ' << std::flush;
@@ -131,6 +236,7 @@ int main() {
                 pixel_color += ray_color(r, world, max_depth);
             }
             write_color(std::cout, pixel_color, samples_per_pixel);
+
         }
     }
 
