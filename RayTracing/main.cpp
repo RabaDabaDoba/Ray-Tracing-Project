@@ -61,6 +61,45 @@ double length_squaredS(point3 p){
     return p[0] * p[0] + p[1] * p[1] + p[2] * p[2];
 }
 
+hittable_list generateRandom() {
+    hittable_list world;
+    
+    float length = 4;
+
+    for (float x = -length; x <= length; x+=0.5) {
+        for (float z = -length; z <= length; z+=0.5) {
+
+            float y = 2 * x * x + 2 * z * z - 4;
+            auto choice = (int)ceil(fRand(0, 3));
+            float size = 0.2;//fmax(t / 12,0.5);
+            std::cerr << x << " " << y << " " << z << " " << std::endl;
+            if (choice == 1) {
+                //regular
+
+                auto material = make_shared<lambertian>(color(fRand(0, 1), fRand(0, 1), fRand(0, 1)));
+                world.add(make_shared<sphere>(point3(x, y, z), size, material));
+            }
+            else if (choice == 2)
+            {
+
+                auto material = make_shared<metal>(color(fRand(0, 1), fRand(0, 1), fRand(0, 1)), fRand(0, 1));
+                world.add(make_shared<sphere>(point3(x, y, z), size, material));
+            }
+            else if (choice == 3)
+            {
+                auto material = make_shared<dielectric>(fRand(-0.5, 0.5));
+                world.add(make_shared<sphere>(point3(x, y, z), size, material));
+            }
+        }
+
+    }
+
+
+
+    return world;
+}
+
+
 hittable_list generateSpiral() {
     hittable_list world;
     int n = 100;
@@ -103,15 +142,17 @@ hittable_list generateSpiral() {
 
 hittable_list generateGrid() {
     hittable_list world;
-    std::cerr << "\rHey! " << ' ' << std::flush;
+    
     //Want to make a grid of spheres with different materials
     double fraction = 10 / (7*6);
     double counter = -1.0;
+    int diec = 0;
     for (int i = 9; i >=-9; i-=3)
     {
         for (int j = -6; j <= 9; j += 3)
         {
-            auto choice = (int)ceil(fRand(0, 2));
+            int choice = (int)counter % 3 +1;//(int)ceil(fRand(0, 2));
+            
             auto size = 1;
             if (choice == 1) {
                 //regular
@@ -125,13 +166,16 @@ hittable_list generateGrid() {
                 auto material = make_shared<metal>(color(fRand(0, 1), fRand(0, 1), fRand(0, 1)), fRand(0, 1));
                 world.add(make_shared<sphere>(point3(i, j, 0), size, material));
             }
-            else if (choice == 3)
+            else/* if (choice == 3)*/
             {
-                auto material = make_shared<dielectric>(fRand(-0.5, 0.5));
+                auto material = make_shared<dielectric>((double) ((int)diec%6) +0.1);
+                std::cerr << "\rHey! " << (double)((int)diec % 6) << std::endl;
+                diec++;
+                
                 world.add(make_shared<sphere>(point3(i, j, 0), size, material));
             }
             
-            
+            counter++;
         }
     }
 
@@ -142,21 +186,22 @@ int main() {
 
     // Image
     const auto aspect_ratio = 16.0 / 9.0;
-    const int image_width = 480;
+    const int image_width = 360;
     const int image_height = static_cast<int>(image_width / aspect_ratio);
-    const int samples_per_pixel = 80;
-    const int max_depth = 15;
+    const int samples_per_pixel = 100;
+    const int max_depth = 40;
 
     // Camera
     hittable_list world;
 
     auto material_ground = make_shared<lambertian>(color(1,1,1));
-    auto material_center = make_shared<lambertian>(color(1,1,0));
+    auto material_center = make_shared<lambertian>(color(1,0,1));
     auto material_left = make_shared<dielectric>(1.5);
     auto material_right = make_shared<metal>(color(.5,.5,.5), 0.0);
     auto material_1 = make_shared<metal>(color(1,1,1), 0);
 
-    world.add(make_shared<sphere>(point3(0.0, -1000, -1.0), 1000.0, material_ground));
+    world.add(make_shared<sphere>(point3(0.0, -1001, -1.0), 1000.0, material_ground));
+    world.add(make_shared<sphere>(point3(0.0, 1007, -1.0), 1000.0, material_ground));
     //world.add(make_shared<sphere>(point3(-125.0, 0, -125.0), 100.0, material_right));
     //world.add(make_shared<sphere>(point3(0.0, 1200.5, -1.0), 1000.0, material_ground));
     //world.add(make_shared<sphere>(point3(0.0, 5, 0), 3, material_right));
@@ -165,11 +210,14 @@ int main() {
     //world.add(make_shared<sphere>(point3(-1.0, 0.0, -1.0), -0.45, material_left));
     //world.add(make_shared<sphere>(point3(1.0, 0.0, -1.0), 0.5, material_right));
 
-    //Generate world;
-    
+    //world.add(make_shared<sphere>(point3(0, 1, 0), 2, make_shared<dielectric>(2)));
+    //world.add(make_shared<sphere>(point3(2, 2, 3), 3, make_shared<dielectric>(1.01)));
+    world.add(make_shared<sphere>(point3(7, 4, 0), 5, make_shared<lambertian>(color(1, 0, 1))));
+    /*5, 4, -5), 5*/
 
+    //Generate world;
     //world = generateGrid();
-    world = generateSpiral();
+    //world = generateRandom();
 
     /*
     point3 focusPoint(0, 0, 0);
@@ -207,8 +255,8 @@ int main() {
 
     // Camera
 
-    point3 lookfrom(40,10,40);
-    point3 lookat(vec3(0,0, 0));
+    point3 lookfrom(-10,4,0);
+    point3 lookat(vec3(2.5,4, 0));
  
     vec3 vup(0, 1, 0);
     auto dist_to_focus = 20;
